@@ -1,0 +1,7 @@
+simplejson
+dropcam
+requests
+xmltodict
+python-twitter
+pytz
+astral
