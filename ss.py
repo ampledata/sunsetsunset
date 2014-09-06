@@ -108,7 +108,7 @@ def twitter_post(media, message=None):
 
 def get_timelapse_stills(camera, ts):
 
-    image_dir = os.path.join(OUTPUT_DIR, camera.name, 'time-lapse')
+    image_dir = os.path.join(OUTPUT_DIR, camera.name, 'time-lapse', str(ts))
 
     width = '1080'
 
