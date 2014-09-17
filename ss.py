@@ -135,10 +135,10 @@ def get_timelapse_stills(camera, ts):
                 camera.save_image(image_path, width=width, seconds=tl_start)
             except dropcam.ConnectionError as ex:
                 print "%s@%s Error: %s" % (camera.name, tl_start, ex)
-            tl_start += 30
+        tl_start =  tl_start + 30
 
     while tl_end > ts:
-        image_name = '.'.join([str(tl_start), 'jpg'])
+        image_name = '.'.join([str(tl_end), 'jpg'])
         image_path = os.path.join(image_dir, image_name)
 
         if os.path.exists(image_path):
@@ -148,10 +148,10 @@ def get_timelapse_stills(camera, ts):
 
         if not image_stat or not image_stat.st_size:
             try:
-                camera.save_image(image_path, width=width, seconds=tl_start)
+                camera.save_image(image_path, width=width, seconds=tl_end)
             except dropcam.ConnectionError as ex:
-                print "%s@%s Error: %s" % (camera.name, tl_start, ex)
-            tl_start -= 30
+                print "%s@%s Error: %s" % (camera.name, tl_end, ex)
+        tl_end = tl_end - 30
 
 
 def main():
@@ -176,7 +176,7 @@ def main():
                             tr = twitter_post(image, message="Today's Sunset (%s)" % sd)
                             if tr:
                                 with open(touch_path, 'w') as twouch:
-                                    twouch.write(tr)
+                                    twouch.write(str(tr))
 
                     get_timelapse_stills(camera, int(sunset_time))
 
