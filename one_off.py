@@ -17,13 +17,15 @@ __copyright__ = 'Copyright 2014 OnBeep, Inc.'
 import datetime
 import json
 import os
+import shutil
 import sys
+import tempfile
 import time
 
 import dropcam
 
 
-OUTPUT_DIR = 'one_off'
+OUTPUT_DIR = '/srv/tomato.28blocks.com/web_root/one_off'
 
 
 def capture_image(camera, seconds=None, prefix=None):
@@ -45,11 +47,15 @@ def capture_image(camera, seconds=None, prefix=None):
 
     camera.set_property('watermark.enabled', 0)
     
+    temp_file = tempfile.mkstemp()[1]
+    
     try:
-        camera.save_image(image_path, width=width, seconds=seconds)
+        camera.save_image(temp_file, width=width, seconds=seconds)
     except dropcam.ConnectionError as ex:
-        print "%s@%s (%s) Error: %s" % (camera.name, seconds, prefix, ex)
+        #print "%s@%s (%s) Error: %s" % (camera.name, seconds, prefix, ex)
         return
+
+    shutil.copyfile(temp_file, image_path)
 
     return image_path
 
