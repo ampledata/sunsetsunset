@@ -178,7 +178,7 @@ def main():
                                 with open(touch_path, 'w') as twouch:
                                     twouch.write(str(tr))
 
-                    get_timelapse_stills(camera, int(sunset_time))
+                    #get_timelapse_stills(camera, int(sunset_time))
 
 
 if __name__ == '__main__':
