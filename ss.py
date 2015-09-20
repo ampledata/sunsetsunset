@@ -168,26 +168,26 @@ def build_msg(sunset_time):
     return ' '.join([message, message_meta, message_forecast])
 
 def main():
+    message = "Today's Sunset"
+
     today_sun = get_sunset()
     sunset_time = today_sun['sunset'].strftime('%s')
 
-    if int(sunset_time) > int(time.time()):
+    touch_file = '.'.join(['twitter', sunset_time])
+    touch_path = os.path.join(OUTPUT_DIR, touch_file)
+
+    if int(sunset_time) > int(time.time()) or os.path.exists(touch_path):
         sys.exit(0)
 
     #message = build_msg(sunset_time)
-    message = "Today's Sunset"
-    
+
     cameras = get_cameras()
 
     for camera in cameras:
         if 'Roof' in camera.name:
             image = capture_image(camera=camera, seconds=sunset_time)
             if image:
-                touch_file = '.'.join(['twitter', sunset_time])
-                touch_path = os.path.join(OUTPUT_DIR, camera.name, touch_file)
-
-                if not os.path.exists(touch_path):
-                    tr = twitter_post(image, message="Today's Sunset")
+                    tr = twitter_post(image, message)
                     if tr:
                         with open(touch_path, 'w') as twouch:
                             twouch.write(str(tr))
