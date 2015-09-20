@@ -28,15 +28,13 @@ import twitter
 OUTPUT_DIR = 'sunsets'
 
 
-def get_sunset(location=None, solar_depression=None):
+def get_sunset(location=None):
     """
-    >>> get_sunset('London', solar_depression='civil')
+    >>> get_sunset('London')
     """
     location = location or 'San Francisco'
-    solar_depression = solar_depression or 'civil'
 
     aao = astral.Astral()
-    aao.solar_depression = solar_depression
     location_astral = aao[location]
     location_sun = location_astral.sun(local=True)
 
@@ -155,28 +153,24 @@ def get_timelapse_stills(camera, ts):
 
 
 def main():
-    solar_depressions = ['astronomical', 'nautical', 'civil']
-
     cameras = get_cameras()
 
-    for sd in solar_depressions:
-        sunset_time = get_sunset(solar_depression=sd)
-        for camera in cameras:
-            if 'Roof' in camera.name:
-                image = capture_image(
-                    camera=camera, seconds=sunset_time, prefix=sd)
+    sunset_time = get_sunset()
+    if int(sunset_time) > int(time.time()):
+        sys.exit(0)
 
-                if sd == 'civil':
-                    if image:
-                        touch_file = '.'.join(['twitter', sunset_time, sd])
-                        touch_path = os.path.join(
-                            OUTPUT_DIR, camera.name, touch_file)
+    for camera in cameras:
+        if 'Roof' in camera.name:
+            image = capture_image(camera=camera, seconds=sunset_time)
+            if image:
+                touch_file = '.'.join(['twitter', sunset_time])
+                touch_path = os.path.join(OUTPUT_DIR, camera.name, touch_file)
 
-                        if not os.path.exists(touch_path):
-                            tr = twitter_post(image, message="Today's Sunset (%s)" % sd)
-                            if tr:
-                                with open(touch_path, 'w') as twouch:
-                                    twouch.write(str(tr))
+                if not os.path.exists(touch_path):
+                    tr = twitter_post(image, message="Today's Sunset")
+                    if tr:
+                        with open(touch_path, 'w') as twouch:
+                            twouch.write(str(tr))
 
                     #get_timelapse_stills(camera, int(sunset_time))
 
