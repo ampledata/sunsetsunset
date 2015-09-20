@@ -22,6 +22,7 @@ import time
 
 import astral
 import dropcam
+import forecastio
 import twitter
 
 
@@ -38,7 +39,7 @@ def get_sunset(location=None):
     location_astral = aao[location]
     location_sun = location_astral.sun(local=True)
 
-    return location_sun['sunset'].strftime('%s')
+    return location_sun
 
 
 def capture_image(camera, seconds=None, prefix=None):
@@ -152,12 +153,31 @@ def get_timelapse_stills(camera, ts):
         tl_end = tl_end - 30
 
 
-def main():
-    cameras = get_cameras()
+def build_msg(sunset_time):
+    forecastio_api_key = os.environ['FORECASTIO_API_KEY']
+    forecast = forecastio.load_forecast(
+        forecastio_api_key, 37.8267, -122.423, sunset_time)
+    message = "Today's Sunset"
+    message_meta = "in San Francisco, CA  USA: %s Sunrise: %s" % (
+        today_sun['sunset'].strftime('%X'), today_sun['sunrise'].strftime('%X'))
+    message_forecast = "High: %s Low: %s Currently: %s" % (
+        forecast['daily']['temperatureMax'],
+        forecast['daily']['temperatureMin'],
+        forecast['currently']['temperature']
+    )
+    return ' '.join([message, message_meta, message_forecast])
 
-    sunset_time = get_sunset()
+def main():
+    today_sun = get_sunset()
+    sunset_time = today_sun['sunset'].strftime('%s')
+
     if int(sunset_time) > int(time.time()):
         sys.exit(0)
+
+    #message = build_msg(sunset_time)
+    message = "Today's Sunset"
+    
+    cameras = get_cameras()
 
     for camera in cameras:
         if 'Roof' in camera.name:

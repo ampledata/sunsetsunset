@@ -5,3 +5,4 @@ xmltodict
 python-twitter
 pytz
 astral
+python-forecastio
