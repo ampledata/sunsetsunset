@@ -22,7 +22,7 @@ import time
 
 import astral
 import dropcam
-import forecastio
+#import forecastio
 import twitter
 
 
