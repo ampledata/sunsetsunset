@@ -174,7 +174,7 @@ def main():
     sunset_time = today_sun['sunset'].strftime('%s')
 
     touch_file = '.'.join(['twitter', sunset_time])
-    touch_path = os.path.join(OUTPUT_DIR, touch_file)
+    touch_path = os.path.join(OUTPUT_DIR, 'lock', touch_file)
 
     if int(sunset_time) > int(time.time()) or os.path.exists(touch_path):
         sys.exit(0)
