@@ -23,10 +23,13 @@ __license__ = 'Apache License, Version 2.0'
 __copyright__ = 'Copyright 2015 Greg Albrecht'
 
 
-OUTPUT_DIR = 'sunset'
+OUTPUT_DIR = 'sunsets'
 
 
 def main():
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+
     if sys.argv[1]:
         camera = sys.argv[1]
         message = "Today's Sunset"
