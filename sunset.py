@@ -11,6 +11,7 @@ Generates sunset and time-lapses.
 
 
 import os
+import shutil
 import sys
 import time
 
