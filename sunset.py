@@ -47,7 +47,7 @@ def main():
         else:
             final_image_stat = None
 
-        if final_image_stat is not None or not final_image_stat.st_size:
+        if final_image_stat is None or not final_image_stat.st_size:
             image_path = sunsetlib.capture_image(camera, seconds=sunset_time)
             if image_path is not None and os.path.exists(image_path):
                 tr = sunsetlib.twitter_post(image_path, message)
