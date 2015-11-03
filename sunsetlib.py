@@ -45,7 +45,7 @@ def capture_image(camera, seconds=None, width=None):
     :param camera: Camera UUID.
     :param seconds: EPOCH time to capture image.
     """
-    seconds = seconds or str(time.time())
+    seconds = seconds or str(int(time.time()))
     width = width or '1080'
 
     _file_prefix = '_'.join(['sunsetlib', camera, width, seconds, '-'])
