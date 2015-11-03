@@ -51,7 +51,7 @@ def main():
             image_path = sunsetlib.capture_image(camera, seconds=sunset_time)
             if image_path is not None and os.path.exists(image_path):
                 tr = sunsetlib.twitter_post(image_path, message)
-                os.move(image_path, final_image)
+                shutil.move(image_path, final_image)
                 if tr:
                     with open(touch_path, 'w') as twouch:
                         twouch.write(str(tr))
