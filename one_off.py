@@ -29,11 +29,13 @@ def main():
     if not os.path.exists(OUTPUT_DIR):
         os.makedirs(OUTPUT_DIR)
 
+    final_image = os.path.join(OUTPUT_DIR, 'roof.jpg')
+
     if sys.argv[1]:
         camera = sys.argv[1]
         image_path = sunsetlib.capture_image(camera)
         if image_path is not None and os.path.exists(image_path):
-            shutil.move(image_path, OUTPUT_DIR)
+            shutil.move(image_path, final_image)
 
 
 if __name__ == '__main__':
